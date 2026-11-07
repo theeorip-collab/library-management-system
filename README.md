@@ -130,3 +130,11 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+## Schema Decisions
+
+The Book model references Genre through a `genreId` foreign key instead of embedding genre information directly inside each book record.
+
+This relational design keeps genre information consistent and avoids duplicating genre names across multiple books. A genre can be associated with many books, while each book belongs to one genre. The relationship is enforced through a foreign key and Prisma's `@relation` attribute.
+
+This approach also makes it easier to update genre information centrally, query books by genre, and maintain referential integrity in PostgreSQL.
