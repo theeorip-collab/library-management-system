@@ -1,0 +1,57 @@
+// use prisma-8
+// Contract inferred from the live database schema. Edit as needed, then run `prisma contract emit`.
+
+namespace public {
+  model Genre {
+    id    Int    @id(map: "Genre_pkey") @default(autoincrement())
+    name  String
+    books Book[]
+
+    @@index([name], map: "Genre_name_key", unique: true)
+  }
+
+  model Book {
+    id          Int                           @id(map: "Book_pkey") @default(autoincrement())
+    title       String
+    author      String
+    isbn        String
+    description String?
+    publishedAt DateTime(storage: timestamp)?
+    genreId     Int
+    createdAt   DateTime(storage: timestamp)  @default(now())
+    reviews     Review[]
+    genre       Genre                         @relation(fields: [genreId], references: [id], onDelete: Restrict, onUpdate: Cascade, map: "Book_genreId_fkey", index: false)
+
+    @@index([isbn], map: "Book_isbn_key", unique: true)
+  }
+
+  model User {
+    id        Int                          @id(map: "User_pkey") @default(autoincrement())
+    name      String
+    email     String
+    password  String
+    role      pg.enum(Role)                @default("PATRON")
+    createdAt DateTime(storage: timestamp) @default(now())
+    reviews   Review[]
+
+    @@index([email], map: "User_email_key", unique: true)
+  }
+
+  model Review {
+    id        Int                          @id(map: "Review_pkey") @default(autoincrement())
+    bookId    Int
+    userId    Int
+    rating    Int
+    comment   String?
+    createdAt DateTime(storage: timestamp) @default(now())
+    book      Book                         @relation(fields: [bookId], references: [id], onDelete: Restrict, onUpdate: Cascade, map: "Review_bookId_fkey", index: "Review_bookId_userId_key")
+    user      User                         @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade, map: "Review_userId_fkey", index: false)
+
+    @@index([bookId, userId], map: "Review_bookId_userId_key", unique: true)
+  }
+
+  native_enum Role {
+    PATRON = "PATRON"
+    LIBRARIAN = "LIBRARIAN"
+  }
+}
