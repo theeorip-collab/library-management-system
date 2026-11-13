@@ -1,6 +1,7 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  importFileExtension = "js"
 }
 
 datasource db {
@@ -28,6 +29,7 @@ model Book {
   title       String
   author      String
   isbn        String    @unique
+   totalCopies Int       @default(1)
   description String?
   publishedAt DateTime?
   genreId     Int
