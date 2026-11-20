@@ -9,14 +9,38 @@ The backend application is located in the `api/` directory.
 ```text
 library-management-system/
 ├── README.md
+├── docs/
+│   └── postman_collection.json
 └── api/
     ├── prisma/
     │   ├── migrations/
     │   ├── schema.prisma
     │   └── seed.ts
     ├── src/
-    │   └── prisma/
-    │       └── prisma.service.ts
+    │   ├── auth/
+    │   │   ├── dto/
+    │   │   ├── auth.controller.ts
+    │   │   ├── auth.service.ts
+    │   │   ├── auth.module.ts
+    │   │   ├── jwt.strategy.ts
+    │   │   ├── jwt-auth.guard.ts
+    │   │   ├── roles.decorator.ts
+    │   │   └── roles.guard.ts
+    │   ├── books/
+    │   │   ├── dto/
+    │   │   ├── books.controller.ts
+    │   │   ├── books.service.ts
+    │   │   └── books.module.ts
+    │   ├── genres/
+    │   │   ├── dto/
+    │   │   ├── genres.controller.ts
+    │   │   ├── genres.service.ts
+    │   │   └── genres.module.ts
+    │   ├── prisma/
+    │   │   ├── prisma.module.ts
+    │   │   └── prisma.service.ts
+    │   ├── app.module.ts
+    │   └── main.ts
     ├── .env.example
     └── package.json
 ```
