@@ -4,11 +4,9 @@ import BookGrid from '../components/BookGrid'
 import SearchBar from '../components/SearchBar'
 
 function HomePage() {
-  const [books, setBooks] = useState([])
   const [genres, setGenres] = useState([])
   const [selectedGenre, setSelectedGenre] = useState('')
   const [search, setSearch] = useState('')
-  const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
   const handleSearch = useCallback((value) => {
@@ -24,27 +22,6 @@ function HomePage() {
       .then(setGenres)
       .catch(() => setError('Unable to load genres.'))
   }, [])
-
-  useEffect(() => {
-    const params = new URLSearchParams()
-
-    if (selectedGenre) params.set('genreId', selectedGenre)
-    if (search) params.set('search', search)
-
-    setLoading(true)
-    setError('')
-
-    fetch(`${API_BASE_URL}/books?${params.toString()}`)
-      .then((response) => {
-        if (!response.ok) throw new Error('Could not load books')
-        return response.json()
-      })
-      .then((result) => {
-        setBooks(result.data || [])
-      })
-      .catch(() => setError('Unable to load books. Please try again.'))
-      .finally(() => setLoading(false))
-  }, [selectedGenre, search])
 
   return (
     <main>
@@ -68,9 +45,9 @@ function HomePage() {
         </select>
       </div>
 
-      {loading && <p>Loading books...</p>}
       {error && <p role="alert">{error}</p>}
-      {!loading && !error && <BookGrid books={books} />}
+
+      <BookGrid genreId={selectedGenre} search={search} />
     </main>
   )
 }
